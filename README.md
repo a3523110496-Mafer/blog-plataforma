@@ -6,8 +6,6 @@ La plataforma permitirá a los usuarios crear, administrar y consultar publicaci
 
 El proyecto se plantea siguiendo una metodología similar a la utilizada en la industria del software, considerando desde el inicio aspectos como arquitectura, accesibilidad, escalabilidad y control de versiones.
 
----
-
 ## Problema que se busca resolver
 Actualmente, muchas personas desean compartir información, ideas o contenido propio sin depender completamente de redes sociales, las cuales limitan el control sobre la información publicada y su organización.
 
@@ -17,16 +15,12 @@ El problema identificado es la falta de plataformas sencillas que permitan:
 - Acceder al contenido desde distintos dispositivos
 - Navegar el sistema de manera accesible, incluso sin mouse
 
----
-
 ## Usuarios objetivo
 Los usuarios principales de la plataforma son:
 - Creadores de contenido
 - Estudiantes
 - Personas interesadas en compartir artículos, opiniones o información temática
 - Usuarios que desean consultar contenido sin necesidad de registrarse
-
----
 
 ## Justificación de la solución
 Una aplicación web es la solución adecuada debido a que:
@@ -35,8 +29,6 @@ Una aplicación web es la solución adecuada debido a que:
 - Facilita la escalabilidad del sistema
 - Puede integrarse con mecanismos de autenticación y control de acceso
 - Permite aplicar buenas prácticas de accesibilidad y usabilidad
-
----
 
 ## Arquitectura general
 El proyecto se divide en las siguientes capas:
@@ -50,16 +42,12 @@ El proyecto se divide en las siguientes capas:
 - **Infraestructura:**  
   Uso de contenedores Docker para asegurar consistencia entre entornos de desarrollo y despliegue.
 
----
-
 ## Tecnologías a utilizar
 - HTML, CSS y JavaScript
 - Node.js
 - Git y GitHub para control de versiones
 - Docker y Docker Compose
 - CI/CD básico mediante GitHub Actions
-
----
 
 ## Accesibilidad
 Desde la fase inicial del proyecto se consideran principios de accesibilidad como:
@@ -68,9 +56,8 @@ Desde la fase inicial del proyecto se consideran principios de accesibilidad com
 - Uso del sistema sin necesidad de mouse
 - Estructura clara y jerarquía de contenido
 
----
-
 ## Estado del proyecto
 Actualmente, el proyecto se encuentra en la fase de arranque, con la estructura base del repositorio, documentación inicial y configuración del entorno de desarrollo.
 
 ---
+
