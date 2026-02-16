@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Plataforma de Apoyo Académico</title>
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <!-- Skip link para teclado -->
+  <a href="#contenido" class="skip-link">Saltar al contenido</a>
+
+  <header class="header">
+    <h1 class="logo">Apoyo Académico</h1>
+
+    <nav aria-label="Navegación principal">
+      <ul class="nav">
+        <li><a href="#" tabindex="0">Cursos</a></li>
+        <li><a href="#" tabindex="0">Publicaciones</a></li>
+        <li><a href="#" tabindex="0">Mi perfil</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="contenido" tabindex="-1">
+    <section class="buscador">
+      <h2>Búsqueda de cursos</h2>
+
+      <label for="search" class="sr-only">Buscar curso</label>
+      <input
+        id="search"
+        type="text"
+        placeholder="Escribe un curso..."
+        aria-describedby="search-help"
+      />
+
+      <p id="search-help">Presiona Enter para buscar</p>
+    </section>
+
+    <section
+      class="resultados"
+      aria-live="polite"
+      aria-busy="false"
+    >
+      <h2>Resultados</h2>
+
+      <ul id="lista-resultados">
+        <!-- Contenido dinámico -->
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <p>Plataforma accesible – Proyecto Fullstack</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
