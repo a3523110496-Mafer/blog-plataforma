@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+<meta charset="UTF-8">
+<title>Dashboard</title>
+
+<link rel="stylesheet" href="../styles/login.css">
+
+</head>
+
+<body>
+
+<div class="login-container">
+
+<h2>Bienvenido</h2>
+
+<p>Has iniciado sesión correctamente.</p>
+
+<button onclick="logout()">Cerrar sesión</button>
+
+</div>
+
+<script>
+
+function logout(){
+  localStorage.removeItem("token");
+  localStorage.removeItem("role");
+  window.location.href = "login.html";
+}
+
+</script>
+<script src="../scripts/session.js"></script>
+
+<script>
+
+checkSession();
+
+</script>
+
+</body>
+</html>
