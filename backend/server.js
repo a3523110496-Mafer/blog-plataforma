@@ -5,8 +5,6 @@ const sessionManager = require("./sessions");
 const recoveryRoutes = require("./routes/recovery");
 
 const authMiddleware = require("./middlewares/auth");
-const roleMiddleware = require("./middlewares/roles");
-
 const authorizeRole = require("./middlewares/roles");
 
 const app = express();
@@ -14,21 +12,21 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-/* ACTIVAR RUTAS DE RECUPERACIÓN */
+/* ============================= */
+/* RECOVERY PASSWORD */
+/* ============================= */
 
 app.use("/api/recovery", recoveryRoutes);
 
-const PORT = 3000;
-
+/* ============================= */
 /* LOGIN */
+/* ============================= */
 
 app.post("/login", (req, res) => {
-
     const { username, password } = req.body;
 
     // ADMIN
     if (username === "admin" && password === "1234") {
-
         const token = Math.random().toString(36);
 
         sessionManager.createSession(username, token, "admin");
@@ -41,7 +39,6 @@ app.post("/login", (req, res) => {
 
     // USER
     if (username === "user" && password === "1234") {
-
         const token = Math.random().toString(36);
 
         sessionManager.createSession(username, token, "user");
@@ -58,56 +55,62 @@ app.post("/login", (req, res) => {
     });
 });
 
-/* DASHBOARD PROTEGIDO */
+/* ============================= */
+/* DASHBOARD (PROTEGIDO) */
+/* ============================= */
 
-app.get("/dashboard", (req, res) => {
-
-const token = req.headers.authorization;
-
-if (!sessionManager.validateSession(token)) {
-
-return res.status(401).json({
-error: "Sesión inválida"
+app.get("/dashboard", authMiddleware, (req, res) => {
+    res.json({
+        message: "Acceso permitido al dashboard"
+    });
 });
 
-}
-
-res.json({
-message: "Acceso permitido"
-});
-
-});
-
+/* ============================= */
 /* LOGOUT */
+/* ============================= */
 
-app.post("/logout", (req, res) => {
+app.post("/logout", authMiddleware, (req, res) => {
+    const token = req.headers.authorization;
 
-const token = req.headers.authorization;
+    sessionManager.invalidateSession(token);
 
-sessionManager.invalidateSession(token);
-
-res.json({
-message: "Sesión cerrada"
+    res.json({
+        message: "Sesión cerrada"
+    });
 });
 
-});
+/* ============================= */
+/* RUTAS POR ROL */
+/* ============================= */
 
-app.listen(PORT, () => {
-
-console.log("Servidor corriendo en http://localhost:3000");
-
-});
-
-//RUTAS SOLO PARA ADMIN
-app.get("/admin", authorizeRole("admin"), (req, res) => {
+// SOLO ADMIN
+app.get("/admin", authMiddleware, authorizeRole("admin"), (req, res) => {
     res.json({
         message: "Bienvenido admin"
     });
 });
 
-//RUTA PROTEGIDA GENERAL
-app.get("/user", authorizeRole("user"), (req, res) => {
+// SOLO USER
+app.get("/user", authMiddleware, authorizeRole("user"), (req, res) => {
     res.json({
         message: "Bienvenido usuario"
     });
+});
+
+/* ============================= */
+/* RUTA RAÍZ (IMPORTANTE PARA RENDER) */
+/* ============================= */
+
+app.get("/", (req, res) => {
+    res.send("API funcionando 🚀");
+});
+
+/* ============================= */
+/* SERVIDOR */
+/* ============================= */
+
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+    console.log(`Servidor corriendo en puerto ${PORT}`);
 });
