@@ -4,6 +4,11 @@ const cors = require("cors");
 const sessionManager = require("./sessions");
 const recoveryRoutes = require("./routes/recovery");
 
+const authMiddleware = require("./middlewares/auth");
+const roleMiddleware = require("./middlewares/roles");
+
+const authorizeRole = require("./middlewares/roles");
+
 const app = express();
 
 app.use(cors());
@@ -19,27 +24,38 @@ const PORT = 3000;
 
 app.post("/login", (req, res) => {
 
-const { username, password } = req.body;
+    const { username, password } = req.body;
 
-if (username === "admin" && password === "1234") {
+    // ADMIN
+    if (username === "admin" && password === "1234") {
 
-const token = Math.random().toString(36);
+        const token = Math.random().toString(36);
 
-sessionManager.createSession(username, token);
+        sessionManager.createSession(username, token, "admin");
 
-res.json({
-token: token,
-role: "admin"
-});
+        return res.json({
+            token,
+            role: "admin"
+        });
+    }
 
-} else {
+    // USER
+    if (username === "user" && password === "1234") {
 
-res.status(401).json({
-error: "Credenciales incorrectas"
-});
+        const token = Math.random().toString(36);
 
-}
+        sessionManager.createSession(username, token, "user");
 
+        return res.json({
+            token,
+            role: "user"
+        });
+    }
+
+    // ERROR
+    res.status(401).json({
+        error: "Credenciales incorrectas"
+    });
 });
 
 /* DASHBOARD PROTEGIDO */
@@ -80,4 +96,18 @@ app.listen(PORT, () => {
 
 console.log("Servidor corriendo en http://localhost:3000");
 
+});
+
+//RUTAS SOLO PARA ADMIN
+app.get("/admin", authorizeRole("admin"), (req, res) => {
+    res.json({
+        message: "Bienvenido admin"
+    });
+});
+
+//RUTA PROTEGIDA GENERAL
+app.get("/user", authorizeRole("user"), (req, res) => {
+    res.json({
+        message: "Bienvenido usuario"
+    });
 });

@@ -1,51 +1,28 @@
 const sessions = {};
 
-function createSession(userId, token) {
-
-if (!sessions[userId]) {
-sessions[userId] = [];
-}
-
-sessions[userId].push({
-token: token,
-createdAt: Date.now()
-});
-
+function createSession(username, token, role) {
+    sessions[token] = {
+        username,
+        role,
+        createdAt: Date.now()
+    };
 }
 
 function validateSession(token) {
-
-for (const userId in sessions) {
-
-const session = sessions[userId].find(s => s.token === token);
-
-if (session) {
-return true;
+    return sessions[token];
 }
 
-}
-
-return false;
-
+function getSession(token) {
+    return sessions[token];
 }
 
 function invalidateSession(token) {
-
-for (const userId in sessions) {
-
-sessions[userId] = sessions[userId].filter(s => s.token !== token);
-
-}
-
-}
-
-function getSessions(userId){
-return sessions[userId] || [];
+    delete sessions[token];
 }
 
 module.exports = {
-createSession,
-validateSession,
-invalidateSession,
-getSessions
+    createSession,
+    validateSession,
+    getSession,
+    invalidateSession
 };

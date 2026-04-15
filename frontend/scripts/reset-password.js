@@ -1,29 +1,21 @@
-const form = document.getElementById("resetForm");
+document.getElementById("resetForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-form.addEventListener("submit", async (e) => {
+    const token = document.getElementById("token").value;
+    const newPassword = document.getElementById("newPassword").value;
 
-e.preventDefault();
+    const res = await fetch("http://localhost:3000/api/recovery/reset-password", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            token,
+            newPassword
+        })
+    });
 
-const token = document.getElementById("token").value;
-const password = document.getElementById("password").value;
+    const data = await res.json();
 
-const response = await fetch("http://localhost:3000/api/recovery/reset-password", {
-
-method: "POST",
-
-headers: {
-"Content-Type": "application/json"
-},
-
-body: JSON.stringify({
-token,
-newPassword: password
-})
-
-});
-
-const data = await response.json();
-
-document.getElementById("result").textContent = data.message || data.error;
-
+    document.getElementById("message").innerText = data.message || data.error;
 });

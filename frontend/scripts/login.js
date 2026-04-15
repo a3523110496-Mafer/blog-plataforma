@@ -1,45 +1,34 @@
-const form = document.getElementById("loginForm");
-const errorMessage = document.getElementById("errorMessage");
+document.querySelector("form").addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-form.addEventListener("submit", async (event) => {
+    const username = document.querySelector("input[type='text']").value;
+    const password = document.querySelector("input[type='password']").value;
 
-  event.preventDefault();
-
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-
-  if(!email || !password){
-    errorMessage.textContent = "Todos los campos son obligatorios";
-    return;
-  }
-
-  try{
-
-    const response = await fetch("http://localhost:3000/login",{
-      method:"POST",
-      headers:{
-        "Content-Type":"application/json"
-      },
-      body: JSON.stringify({email,password})
+    const res = await fetch("http://localhost:3000/login", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            username,
+            password
+        })
     });
 
-    const data = await response.json();
+    const data = await res.json();
 
-    if(!response.ok){
-      errorMessage.textContent = data.message;
-      return;
+    console.log(data);
+
+    if (res.ok) {
+        alert("Login exitoso");
+    } else {
+        alert(data.error);
     }
 
-    localStorage.setItem("token",data.token);
-    localStorage.setItem("role",data.role);
-    localStorage.setItem("loginTime", Date.now());
+    if (res.ok) {
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("role", data.role);
 
-    window.location.href="dashboard.html";
-
-  }catch(error){
-
-    errorMessage.textContent="Error de conexión con el servidor";
-
-  }
-
+    window.location.href = "../pages/dashboard.html";
+}
 });

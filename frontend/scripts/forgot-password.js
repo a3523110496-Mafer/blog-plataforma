@@ -1,25 +1,19 @@
-const form = document.getElementById("recoveryForm");
+document.getElementById("forgotForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-form.addEventListener("submit", async (e) => {
+    const email = document.getElementById("email").value;
 
-e.preventDefault();
+    const res = await fetch("http://localhost:3000/api/recovery/request-reset", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ email })
+    });
 
-const email = document.getElementById("email").value;
+    const data = await res.json();
 
-const response = await fetch("http://localhost:3000/api/recovery/request-reset", {
+    document.getElementById("message").innerText = data.message;
 
-method: "POST",
-
-headers: {
-"Content-Type": "application/json"
-},
-
-body: JSON.stringify({ email })
-
-});
-
-const data = await response.json();
-
-document.getElementById("message").textContent = data.message;
-
+    alert("Revisa la consola del backend para ver el token 👀");
 });
