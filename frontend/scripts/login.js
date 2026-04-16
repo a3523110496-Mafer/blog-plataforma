@@ -1,13 +1,13 @@
-const API = "https://blog-plataforma.onrender.com";
+const API = "";
 
-// 👇 ESCUCHAR EL FORM
-document.getElementById("loginForm").addEventListener("submit", function(e) {
-    e.preventDefault(); // 🚨 evita que se recargue
+function login(event) {
+
+    event.preventDefault();
 
     const username = document.getElementById("email").value;
     const password = document.getElementById("password").value;
 
-    fetch(`${API}/login`, {
+    fetch(`/login`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -16,18 +16,17 @@ document.getElementById("loginForm").addEventListener("submit", function(e) {
     })
     .then(res => res.json())
     .then(data => {
-        console.log("RESPUESTA:", data);
 
         if (data.token) {
             localStorage.setItem("token", data.token);
             localStorage.setItem("role", data.role);
-
             window.location.href = "dashboard.html";
         } else {
-            document.getElementById("errorMessage").textContent = "Credenciales incorrectas";
+            alert("Error al iniciar sesión");
         }
-    })
-    .catch(err => {
-        console.error("Error:", err);
+
     });
-});
+}
+
+/* ACTIVAR FORM */
+document.getElementById("loginForm").addEventListener("submit", login);
