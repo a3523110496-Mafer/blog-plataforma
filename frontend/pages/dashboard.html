@@ -1,59 +1,87 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-
 <meta charset="UTF-8">
 <title>Dashboard</title>
 
 <link rel="stylesheet" href="../styles/login.css">
 
+<style>
+/* BOTÓN FLOTANTE */
+.logout-floating {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: #2617cc;
+    border: none;
+    padding: 10px 14px;
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.logout-floating:hover {
+    background: #09b5e0;
+}
+</style>
+
 </head>
 
 <body>
 
+<!-- BOTÓN ARRIBA DERECHA -->
+<button class="logout-floating" onclick="logout()">Cerrar sesión</button>
+
+<!-- CONTENIDO CENTRADO -->
 <div class="login-container">
 
-<h2>Bienvenido</h2>
+    <!-- SOLO ADMIN -->
+    <div id="adminSection">
 
-<p>Has iniciado sesión correctamente.</p>
+        <h3>✍️ Crear Post</h3>
 
-<button onclick="logout()">Cerrar sesión</button>
+        <input id="title" placeholder="Título del post">
+        <input id="content" placeholder="Contenido del post">
+
+        <button onclick="createPost()">Publicar</button>
+
+        <hr>
+
+    </div>
+
+    <!-- POSTS -->
+    <h3>📰 Posts</h3>
+
+    <button onclick="getPosts()">Cargar Posts</button>
+
+    <div id="posts"></div>
 
 </div>
 
-<script>
-
-function logout(){
-  localStorage.removeItem("token");
-  localStorage.removeItem("role");
-  window.location.href = "login.html";
-}
-
-</script>
+<!-- SCRIPTS -->
 <script src="../scripts/session.js"></script>
+<script src="../scripts/dashboard.js"></script>
 
 <script>
+    // 🔐 proteger
+    protectPage();
 
-checkSession();
+    // 🎭 roles
+    const role = localStorage.getItem("role");
 
-</script>
-
-<script>
-const token = localStorage.getItem("token");
-
-if (!token) {
-    alert("No autorizado");
-    window.location.href = "login.html";
-}
-</script>
-<script>
-fetch("http://localhost:3000/admin", {
-    headers: {
-        Authorization: localStorage.getItem("token")
+    if (role !== "admin") {
+        document.getElementById("adminSection").style.display = "none";
     }
-})
-.then(res => res.json())
-.then(data => console.log(data));
+
+    // 🚪 logout
+    function logout(){
+        localStorage.removeItem("token");
+        localStorage.removeItem("role");
+        window.location.href = "login.html";
+    }
 </script>
+
 </body>
 </html>

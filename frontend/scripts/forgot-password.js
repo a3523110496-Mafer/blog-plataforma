@@ -1,19 +1,15 @@
-document.getElementById("forgotForm").addEventListener("submit", async (e) => {
-    e.preventDefault();
+const API = "https://blog-plataforma.onrender.com";
 
+function requestReset() {
     const email = document.getElementById("email").value;
 
-    const res = await fetch("http://localhost:3000/api/recovery/request-reset", {
+    fetch(`${API}/api/recovery/request-reset`, {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
+        headers: {"Content-Type": "application/json"},
         body: JSON.stringify({ email })
+    })
+    .then(res => res.json())
+    .then(data => {
+        alert("Revisa consola para el token (simulado)");
     });
-
-    const data = await res.json();
-
-    document.getElementById("message").innerText = data.message;
-
-    alert("Revisa la consola del backend para ver el token 👀");
-});
+}

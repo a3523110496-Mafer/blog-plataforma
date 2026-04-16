@@ -1,25 +1,13 @@
-const sessionManager = require("../sessions");
-
-function authorizeRole(role) {
+module.exports = (role) => {
     return (req, res, next) => {
-        const token = req.headers.authorization;
-
-        const session = sessionManager.getSession(token);
-
-        if (!session) {
-            return res.status(401).json({
-                error: "No autenticado"
-            });
+        if (!req.user) {
+            return res.status(401).json({ error: "No autorizado" });
         }
 
-        if (session.role !== role) {
-            return res.status(403).json({
-                error: "No autorizado"
-            });
+        if (req.user.role !== role) {
+            return res.status(403).json({ error: "Acceso denegado" });
         }
 
         next();
     };
-}
-
-module.exports = authorizeRole;
+};

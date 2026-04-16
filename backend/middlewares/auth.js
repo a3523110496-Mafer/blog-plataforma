@@ -1,18 +1,18 @@
 const sessionManager = require("../sessions");
 
-function authMiddleware(req, res, next) {
-
+module.exports = (req, res, next) => {
     const token = req.headers.authorization;
 
-    if (!token || !sessionManager.validateSession(token)) {
-        return res.status(401).json({
-            error: "No autorizado"
-        });
+    if (!token) {
+        return res.status(401).json({ error: "No token" });
     }
 
-    req.user = sessionManager.getSession(token);
+    const session = sessionManager.validateSession(token);
 
+    if (!session) {
+        return res.status(401).json({ error: "Sesión inválida" });
+    }
+
+    req.user = session;
     next();
-}
-
-module.exports = authMiddleware;
+};

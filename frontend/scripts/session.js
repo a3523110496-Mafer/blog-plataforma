@@ -1,20 +1,29 @@
-function checkSession(){
+const API = "https://blog-plataforma.onrender.com";
 
-const token = localStorage.getItem("token");
-const loginTime = localStorage.getItem("loginTime");
-
-if(!token){
-window.location.href = "/frontend/pages/login.html";
-return;
+function saveSession(token) {
+    localStorage.setItem("token", token);
 }
 
-const now = Date.now();
-const maxSession = 60 * 60 * 1000;
-
-if(now - loginTime > maxSession){
-
-logout();
-
+function getToken() {
+    return localStorage.getItem("token");
 }
 
+function logout() {
+    fetch(`${API}/logout`, {
+        method: "POST",
+        headers: {
+            "Authorization": getToken()
+        }
+    });
+
+    localStorage.removeItem("token");
+    window.location.href = "login.html";
+}
+
+function protectPage() {
+    const token = getToken();
+
+    if (!token) {
+        window.location.href = "login.html";
+    }
 }
