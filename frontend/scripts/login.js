@@ -20,7 +20,7 @@ function login(event) {
         if (data.token) {
             localStorage.setItem("token", data.token);
             localStorage.setItem("role", data.role);
-            window.location.href = "dashboard.html";
+            window.location.href = "/pages/dashboard.html";
         } else {
             alert("Error al iniciar sesión");
         }
